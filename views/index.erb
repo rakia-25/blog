@@ -1,0 +1,17 @@
+<h1>Liste des articles</h1>
+<a href="/create">Creer un nouvel article</a>
+<ul>
+   <%@articles.each do |article|%> 
+   <li><%= article["id"] %>
+   <%= article["titre"] %>
+   <%= article["contenu"] %>
+   <a href="/articles/<%=article["id"]%>/edit">Modifier</a>
+   <form action="/articles/<%=article["id"]%>" method="post" style="display:inline;">
+<input type="hidden" value="DELETE" name="_method">
+<button type="submit">Supprimer</button>
+
+</form>
+
+</li>
+<%end%>
+</ul>

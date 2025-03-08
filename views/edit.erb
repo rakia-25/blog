@@ -1,0 +1,11 @@
+<h1>Modification</h1>
+
+<form action="/articles/<%=@article["id"]%>" method="post">
+<label for="titre">Titre</label>
+<input type="hidden" name="_method" value="PUT">
+<input type="text" id="titre" name="inputTitre" value="<%= @article["titre"] %>">
+<label for="contenu">Contenu</label>
+<textarea name="inputContenu" id="contenu"><%= @article["contenu"]%></textarea>
+<input type="submit" value="Enregistrer les modifications" />
+</form>
+<a href="/">Retour</a>
