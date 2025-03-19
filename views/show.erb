@@ -1,0 +1,26 @@
+<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold text-gray-900 mb-4"><%= @article["titre"] %></h1>
+    <p class="text-gray-700 text-lg leading-relaxed mb-6"><%= @article["contenu"] %></p>
+    
+    <h2 class="text-2xl font-bold mt-6">Commentaires</h2>
+  <ul class="mt-2">
+    <% @article["comments"].each do |comment| %>
+      <li class="border-b py-2"><%= comment["message"] %> <br>
+      <a href="/articles/<%= @article["id"]%>/<%= comment["id"]%>/edit"class="inline-block px-[5px] py-[5px] mt-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Modifier</a>
+      <form action="/articles/<%= @article["id"]%>/comments/<%= comment["id"]%>" method="post" style="display:inline;">
+        <input type="hidden" value="delete" name="_method">
+        <button type="submit" class="inline-block px-[5px] py-[5px] mt-2 bg-red-600 text-white font-bold rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">Supprimer</button>
+    </form>
+      </li>
+    <% end %>
+  </ul>
+
+  <h3 class="text-xl font-bold mt-4">Ajouter un commentaire</h3>
+  <form action="/articles/<%= @article["id"] %>/comments" method="post">
+    <textarea name="inputComment" required class="border p-2 w-full mb-2"></textarea>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Envoyer</button>
+  </form> <br>
+    <a href="/articles" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        ← Retour
+    </a>
+</div>

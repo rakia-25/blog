@@ -1,4 +1,5 @@
 require 'sinatra'
+enable :method_override
 require 'json'
 require 'securerandom'
 
@@ -22,31 +23,62 @@ def save_articles(articles)
   File.write(ARTICLES_JSON,JSON.pretty_generate(articles))
 end
 
-get '/'do
-@articles=load_articles
-erb:'index'
+#Page d'acceuil
+get '/' do
+  erb:'accueil'
 end
 
+#affiche la liste de tout les articles
+get '/articles' do
+  @articles=load_articles()
+  erb:'articles'
+end
+
+#affiche le formulaire de création d'un article
 get '/create' do
-  erb:'create'
+  erb:'new_article'
 end
 
 #creation d'un article
-  post '/articles/create' do
-    articles = load_articles
-    new_article =
+post '/articles/create' do
+  articles = load_articles()
+  new_article =
+  {
+    "id"=> SecureRandom.uuid,
+    "titre"=> params[:inputTitre],
+    "contenu"=> params[:inputContenu],
+    "comments" => []
+  }
+  articles.push(new_article)
+  save_articles(articles)
+  redirect '/articles'
+end
+
+#Creation des commentaires d'un article
+post '/articles/:id/comments' do
+  articles = load_articles()
+  @article = articles.find { |a| a["id"]==params[:id]}
+  if @article
+    new_comment =
     {
       "id"=> SecureRandom.uuid,
-      "titre"=> params[:inputTitre],
-      "contenu"=> params[:inputContenu]
+      "message"=> params[:inputComment]
     }
-    articles.push(new_article)
+    @article["comments"] << new_comment
     save_articles(articles)
-    redirect '/'
   end
+  redirect "/articles/#{params[:id]}"
+end
 
-  #afficher le formuaire d'edition d'un article
-get '/articles/:id/edit' do 
+#details d'un article
+get '/articles/:id' do
+  articles = load_articles
+  @article = articles.find { |a| a["id"]==params[:id]}
+  erb:'show'
+end
+
+#afficher le formuaire d'edition d'un article
+get '/articles/:id/edit' do
   articles = load_articles
   @article = articles.find { |a| a["id"]==params[:id]}
   if @article
@@ -57,14 +89,14 @@ get '/articles/:id/edit' do
 end
 
 #modifie un article
-put '/articles/:id' do
+put '/articles/:id' do 
   articles=load_articles
   article=articles.find { |a| a["id"]==params[:id]}
   if article
     article["titre"]=params[:inputTitre]
     article["contenu"]=params[:inputContenu]
     save_articles(articles)
-    redirect "/"
+    redirect "/articles"
   else
     "article non trouvé"
   end
@@ -75,5 +107,51 @@ delete '/articles/:id' do
   articles=load_articles
   articles.reject! { |a| a["id"]==params[:id]}
   save_articles(articles)
-  redirect '/'
+  redirect '/articles'
+end
+
+#afficher le formuaire d'edition d'un commentaire
+get '/articles/:id_article/:id_comment/edit' do
+  articles = load_articles()
+  @article = articles.find { |a| a["id"]==params[:id_article]}
+  if @article
+    @comment = @article["comments"].find{|c| c["id"]==params[:id_comment]}
+    if @comment
+      erb:'edit_comment'
+    else 
+      puts "ommentaire non trouvé"
+    end
+  else
+    puts "article non trouvé"
+  end
+end
+
+put '/articles/:id_article/comments/:id_comment' do
+  @articles = load_articles
+  @article = @articles.find { |a| a["id"] == params[:id_article] }
+
+  if @article
+    @comment = @article["comments"].find { |c| c["id"] == params[:id_comment] }
+    
+    if @comment
+      @comment["message"] = params[:inputMessage]  # Vérifier le nom du champ dans le formulaire
+      save_articles(@articles)
+      redirect "/articles/#{params[:id_article]}"
+    else
+      halt 404, "Commentaire non trouvé"
+    end
+  else
+    halt 404, "Article non trouvé"
+  end
+end
+
+#supprimer un commentaire
+delete '/articles/:id_article/comments/:id_comment' do
+  @articles=load_articles
+  @article = @articles.find { |a| a["id"] == params[:id_article] }
+  if @article
+    @article["comments"].reject! { |c| c["id"]==params[:id_comment]}
+    save_articles(@articles)
+    redirect "/articles/#{params[:id_article]}"
+  end
 end

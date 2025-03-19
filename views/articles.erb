@@ -1,0 +1,21 @@
+<h2 class="text-2xl font-bold mb-4">Liste des articles</h2>
+<div class="bg-white shadow-md p-4 rounded">
+<ul>
+    <% if @articles.empty? %>
+    <li class="text-gray-500">Aucun article trouvé.</li>
+    <% else %>
+    <% @articles.each do |article| %>
+    <li class="border-b py-2">
+        <strong>Numéro de l'article:</strong> <%= article["id"] %> -
+        <strong>Titre de l'article: </strong><%= article["titre"] %> <br>
+        <a href="/articles/<%=article["id"]%>"class="inline-block px-3 py-2 mt-2 bg-green-600 text-white font-bold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">voir</a>
+        <a href="/articles/<%=article["id"]%>/edit"class="inline-block px-3 py-2 mt-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Modifier</a>
+        <form action="/articles/<%=article["id"]%>" method="post" style="display:inline;">
+            <input type="hidden" value="DELETE" name="_method">
+            <button type="submit" class="inline-block px-4 py-2 mt-2 bg-red-600 text-white font-bold rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">Supprimer</button>
+            </form>
+            <% end %>
+            </li>
+    <% end %>
+</ul>
+</div>

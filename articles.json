@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "id": "be57063b-d369-4f28-b1f3-89cd710f0861",
+    "titre": "titre 1",
+    "contenu": "contenu de l'article 1",
+    "comments": [
+      {
+        "id": "e52a3233-3fb3-4395-acad-9ccab8a09a26",
+        "message": "Rakia Seyni"
+      },
+      {
+        "id": "73457667-5aa0-41b1-ab2d-94bce0c0cea2",
+        "message": "aida seyni"
+      },
+      {
+        "id": "93c515bb-5fb5-4f23-95f7-a67df082aa88",
+        "message": "sdfg"
+      }
+    ]
+  },
+  {
+    "id": "2915721e-08e9-4f71-ae30-923fb0bebd49",
+    "titre": "titre 2",
+    "contenu": "cvbn,",
+    "comments": [
+      {
+        "id": "70baeca8-2c01-4d6d-83c1-e74e1b2a3ddb",
+        "message": "bjout"
+      },
+      {
+        "id": "a84d5fb9-d615-4c2f-b571-6cfb23493310",
+        "message": "fdvhhhg"
+      }
+    ]
+  }
+]

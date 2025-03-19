@@ -1,0 +1,6 @@
+<h2 class="text-xl font-bold mt-4">Modifier un commentaire</h2>
+<form action="/articles/<%=@article["id"]%>/comments/<%=@comment["id"]%>" method="post">
+  <input type="hidden" name="_method" value="put">
+  <textarea name="inputMessage" class="border p-2 w-full mb-2"><%= @comment["message"] %></textarea>
+  <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded">Modifier</button>
+</form>
